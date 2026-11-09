@@ -1,0 +1,19 @@
+# Database backups and dumps with real data
+*.backup
+*.dump
+*.bak
+
+# Local environment and credentials
+.env
+*.pem
+pgpass.conf
+
+# Editor and OS files
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+# Scratch work
+scratch/
+*.tmp

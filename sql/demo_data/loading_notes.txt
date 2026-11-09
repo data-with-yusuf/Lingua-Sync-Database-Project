@@ -1,0 +1,46 @@
+# Demo Data Loading Notes
+
+All data is fictional. Names, rates, invoices and payments do not
+represent real people or transactions. Platform account passwords are
+the placeholder value `PLACEHOLDER`.
+
+## Before you load
+
+Create the database and run the schema first (see
+`sql/schema/00_run_order.md`). Triggers must exist before the data is
+loaded.
+
+## File order
+
+Run the files in numbered order. Each file depends on the ones before it
+because of foreign keys.
+
+| Order | File | Contents |
+|---|---|---|
+| 1 | `01_reference_data.sql` | Currencies, billing units, manager roles, languages, agencies |
+| 2 | `02_core_entities.sql` | Project types, managers, collaborators, agency contacts, exchange rates, language pairs |
+| 3 | `03_projects_2023.sql` | 30 projects for 2023 |
+| 4 | `04_projects_2024.sql` | 30 projects for 2024 |
+| 5 | `05_accounts_and_banks.sql` | Platform accounts, bank accounts |
+| 6 | `06_junction_data.sql` | Project pairs, account pairs, collaborator skills |
+| 7 | `07_rate_history_and_assignments.sql` | Rate history, project assignments |
+| 8 | `08_work_records_and_communications.sql` | Work records, communication log |
+| 9 | `09_invoices_and_payments.sql` | Revision log, agency invoices, collaborator payments |
+
+Adjust the file names above if yours differ.
+
+## Two triggers are disabled temporarily
+
+The demo data includes history that pre-dates the current rules, and
+two triggers reject it:
+
+| Trigger | Why it blocks | Handled in |
+|---|---|---|
+| `trg_check_collaborator_eligibility` | One historical assignment belongs to a collaborator who is now Inactive | File 07 |
+| `trg_check_revision_eligibility` | Revisions were requested on records that are now Approved or Paid | File 09 |
+
+Each file disables the trigger, inserts the rows and enables it again
+straight away. After loading, confirm both are enabled:
+
+```sql
+SELECT tgname, tgenabled

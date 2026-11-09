@@ -1,0 +1,45 @@
+# Known Limitations
+
+Stated plainly so readers know what has and has not been done.
+
+## Environment
+- Runs locally on PostgreSQL 15. It is not deployed to a server.
+- No application layer, user roles or row-level security.
+
+## Performance
+- Demo data is 687 rows. At this size PostgreSQL usually prefers
+  sequential scans, so index benefits are not measurable.
+- Index usage has not been analysed with EXPLAIN ANALYZE yet.
+- Some foreign-key columns have no index, for example
+  `agency_contact.agency_id` and `bank_account.collaborator_id`.
+
+## Transactions
+- Multi-step workflows (approve work, then create payment) are not
+  wrapped in explicit transactions yet. Planned.
+
+## Security
+- Passwords in `platform_account` are placeholders in the demo data.
+  A real deployment would need proper credential handling.
+- The view `active_platform_accounts` returns the password column and
+  should not be exposed to ordinary users.
+
+## Data and logic
+- Timestamps use `timestamp without time zone`.
+- Payment amounts are not computed by the database. They are entered
+  separately from work records and rates.
+- `exchange_rate` exists, but the reporting views do not convert
+  currencies. Demo transactions are in one currency.
+- Auto-complete and rate-history triggers were not tested for edge
+  cases, such as projects mixing cancelled and approved records.
+- The full definition of `chk_sender_identity` was clipped during
+  inspection. Its PM branch is confirmed.
+
+## Demo data
+- Fictional, and small. Counts: 687 rows, including 51 languages.
+- Two triggers must be disabled temporarily to load historical records
+  that pre-date the current statuses. See `sql/demo_data/loading_notes.md`.
+
+## Not yet included
+- Production-scale test dataset.
+- Backup and restore procedures.
+- Schema migration scripts.
