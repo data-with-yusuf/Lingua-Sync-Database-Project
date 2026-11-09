@@ -33,4 +33,4 @@ Cover one table and read the symbol next to the other.
 A mandatory (NOT NULL) foreign key gives `||` on the parent side.
 A nullable one gives `O|`.
 
-For the full explanation, see `docs/notation_guide.md`.
+For the full explanation, see [Notation Guide](/docs/notation_guide.md).

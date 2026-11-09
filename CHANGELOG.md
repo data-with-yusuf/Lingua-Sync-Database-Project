@@ -14,5 +14,3 @@
 - Designed the schema (ER model, functional dependencies, BCNF).
 - Implemented tables, constraints, triggers, indexes and views.
 - Loaded fictional demo data and ran 53 verification tests.
-
-skskskksks
